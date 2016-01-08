@@ -1,0 +1,64 @@
+{
+    "variables": {
+        "account_file": "",
+        "project_id": "",
+        "ssh_user": "",
+        "zone": "",
+        "machine_type": "",
+        "cluster_name": "",
+        "consul_version": "0.6.0",
+        "swarm_version": "1.0.0",
+        "image_name": "hyperion-swarm-0-2-0-v20160108",
+        "image_description": "Docker Swarm Base Image for Hyperion"
+    },
+    "builders": [
+        {
+            "type": "googlecompute",
+            "account_file": "{{user `account_file`}}",
+            "project_id": "{{user `project_id`}}",
+            "source_image": "debian-8-jessie-v20151104",
+            "zone": "{{user `zone`}}",
+            "disk_size": 20,
+            "image_name": "{{user `image_name`}}",
+            "image_description": "{{user `image_description`}}",
+            "machine_type": "{{user `machine_type`}}",
+            "ssh_username": "{{user `ssh_user`}}"
+        }
+    ],
+    "provisioners": [
+         {
+             "type": "shell",
+             "inline": [
+                 "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
+                 "echo 'deb http://apt.dockerproject.org/repo debian-jessie main' > /tmp/docker.list",
+                 "sudo mv /tmp/docker.list /etc/apt/sources.list.d/docker.list",
+                 "sudo apt-get -y update",
+                 "sudo apt-get purge lxc-docker",
+                 "sudo apt-get -y install unzip docker-engine curl"
+             ]
+         },
+        {
+            "type": "shell",
+            "inline": [
+                "curl -o /tmp/consul.zip -L https://releases.hashicorp.com/consul/{{ user `consul_version` }}/consul_{{ user `consul_version` }}_linux_amd64.zip",
+                "sudo unzip -d /usr/local/bin /tmp/consul.zip",
+                "sudo mkdir -p /etc/consul"
+
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo mkdir -p /opt/consul/ui",
+                "curl -o /tmp/consul-ui.zip -L https://releases.hashicorp.com/consul/{{ user `consul_version` }}/consul_{{ user `consul_version` }}_web_ui.zip",
+                "sudo unzip -d /opt/consul/ui /tmp/consul-ui.zip"
+            ]
+        },
+		{
+			"type": "shell",
+			"inline": [
+				"sudo docker run -d --name rancher-server swarm:{{user `swarm_version`}}"
+			]
+		}
+    ]
+}
