@@ -11,7 +11,16 @@
 - Orchestrated provisioning is performed using [Terraform][]
 - Applications managment is performed using [Docker Swarm][] and [Wagl][]
 
-## Docker Swarm and Wagl
+## Docker Swarm, Wagl and Consul
+
+In [Docker Swarm][] :
+
+- node: a host machine that is only responsible for running containers
+- manager : the service a user uses for managing containers across the registered Swarm Node(s).
+- consul : the service discovery used (See https://docs.docker.com/swarm/discovery/)
+
+
+
 
 
 ## Initialization
@@ -19,6 +28,7 @@
 Initialize environment:
 
     $ make init
+
 
 ## Machine image
 
@@ -31,14 +41,17 @@ Read guides to creates the machine for a cloud provider :
 Read guides to creates the infrastructure :
 
 * [Google cloud](https://github.com/portefaix/hyperion-swarm/blob/infra/google/README.md)
-* [AWS](https://github.com/portefaix/hyperion-swarm/blob/infra/aws/README.md)
-* [Digitalocean](https://github.com/portefaix/hyperion-swarm/blob/infra/digitalocean/README.md)
-* [Openstack](https://github.com/portefaix/hyperion-swarm/blob/infra/openstack/README.md)
 
 
 ## Usage
 
+* Setup your Docker Swarm cluster informations :
 
+        $ export DOCKER_HOST=tcp://x.x.x.x:2375
+
+* Check cluster informations :
+
+        $ docker info
 
 
 ## Contributing

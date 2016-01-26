@@ -1,0 +1,14 @@
+#
+# Hyperion-swarm Google Cloud setup
+#
+
+gce_credentials="/home/user/.config/gcloud/xxxxxxxxxxx.json"
+gce_project="my-project"
+gce_ssh_user="my-gce-user"
+gce_ssh_public_key = "/home/user/.ssh/id_rsa.pub"
+gce_ssh_private_key_file="/home/user/.ssh/id_rsa"
+
+nb_nodes = "2"
+
+gce_region = "us-central1"
+gce_cluster_name = "hyperion-consul"

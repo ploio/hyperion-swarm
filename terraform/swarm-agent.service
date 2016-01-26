@@ -1,0 +1,15 @@
+[Unit]
+Description=swarm agent
+Requires=docker.service
+After=docker.service
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=20m
+ExecStartPre=/usr/bin/docker pull swarm:${swarm_version}
+ExecStartPre=-/usr/bin/docker rm -f swarm-agent
+ExecStart=/bin/sh -c "/usr/bin/docker run --rm --name swarm-agent swarm:${swarm_version} join consul://${consul_server}:8500/"
+ExecStop=/usr/bin/docker stop swarm-agent
+
+[Install]
+WantedBy=multi-user.target
