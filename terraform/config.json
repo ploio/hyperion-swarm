@@ -1,0 +1,17 @@
+{
+    "datacenter" : "hyperion-swarm",
+    "bootstrap" : true,
+    "bootstrap_expect" : 0,
+    "server" : true,
+    "data_dir" : "/opt/consul/data",
+    "ui_dir" : "/opt/consul/ui",
+    "log_level" : "INFO",
+    "enable_syslog" : false,
+    "start_join" : [],
+    "retry_join" : [],
+    "client_addr" : "0.0.0.0",
+    "bind_addr": "__IP_ADDR__",
+    "addresses" : {
+        "http": "__IP_ADDR__"
+    }
+}

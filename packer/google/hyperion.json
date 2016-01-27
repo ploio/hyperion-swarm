@@ -6,9 +6,9 @@
         "zone": "",
         "machine_type": "",
         "cluster_name": "",
-        "consul_version": "0.6.0",
+        "consul_version": "0.6.3",
         "swarm_version": "1.0.0",
-        "image_name": "hyperion-swarm-0-3-0-v20160126",
+        "image_name": "hyperion-swarm-0-4-0-v20160127",
         "image_description": "Docker Swarm Base Image for Hyperion"
     },
     "builders": [

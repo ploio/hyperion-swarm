@@ -47,11 +47,11 @@ Read guides to creates the infrastructure :
 
 * Setup your Docker Swarm cluster informations :
 
-        $ export DOCKER_HOST=tcp://x.x.x.x:2375
+        $ alias dockerswarm="docker -H=tcp://x.x.x.x:2375"
 
 * Check cluster informations :
 
-        $ docker info
+        $ dockerswarm info
 
 
 ## Contributing
