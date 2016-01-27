@@ -2,7 +2,7 @@ resource "template_file" "swarm-manager-service" {
   template = "../swarm-manager.service"
   vars {
     swarm_version = "${var.swarm_version}"
-    consul_server = "http://${var.cluster_name}-discover.c.${var.gce_project}.internal"
+    consul_server = "${var.cluster_name}-discover.c.${var.gce_project}.internal"
   }
 }
 
@@ -10,8 +10,7 @@ resource "template_file" "swarm-agent-service" {
   template = "../swarm-agent.service"
   vars {
     swarm_version = "${var.swarm_version}"
-    consul_server = "http://${var.cluster_name}-discover.c.${var.gce_project}.internal"
-    swarm_master = "http://${var.cluster_name}-master.c.${var.gce_project}.internal"
+    consul_server = "${var.cluster_name}-discover.c.${var.gce_project}.internal"
   }
 }
 
@@ -25,9 +24,6 @@ resource "template_file" "consul-config" {
 
 resource "template_file" "consul-service" {
   template = "../consul.service"
-  # vars {
-  #   consul_server = "http://${var.cluster_name}-discover.c.${var.gce_project}.internal"
-  # }
 }
 
 
@@ -149,9 +145,7 @@ resource "google_compute_instance" "hyperion-master" {
   provisioner "remote-exec" {
     inline = [
       "sudo cat <<'EOF' > /tmp/swarm-manager.service\n${template_file.swarm-manager-service.rendered}\nEOF",
-      "sudo cat <<'EOF' > /tmp/docker.service\n${template_file.docker-service.rendered}\nEOF",
       "sudo mv /tmp/swarm-manager.service /lib/systemd/system/",
-      "sudo mv /tmp/docker.service /lib/systemd/system/",
       "sudo systemctl daemon-reload",
       "sudo systemctl restart docker.service",
       "sudo systemctl start swarm-manager.service"
@@ -159,7 +153,6 @@ resource "google_compute_instance" "hyperion-master" {
   }
   depends_on = [
     "template_file.swarm-manager-service",
-    "template_file.docker-service"
   ]
 }
 
@@ -190,11 +183,17 @@ resource "google_compute_instance" "hyperion-nodes" {
   }
   provisioner "remote-exec" {
     inline = [
+      "/sbin/ifconfig eth0 | grep \"inet addr\" | awk '{ print substr($2,6) }' > /tmp/ip_addr",
+      // For ID duplicated: https://github.com/docker/swarm/issues/380
+
       "sudo cat <<'EOF' > /tmp/swarm-agent.service\n${template_file.swarm-agent-service.rendered}\nEOF",
       "sudo cat <<'EOF' > /tmp/docker.service\n${template_file.docker-service.rendered}\nEOF",
-      "sudo mv /tmp/swarm-agent.service /usr/lib/systemd/system/",
-      "sudo mv /tmp/docker.service /usr/lib/systemd/system/",
+      "sudo sed -i \"s/__IP_ADDR__/$(cat /tmp/ip_addr)/g\" /tmp/swarm-agent.service",
+      "sudo mv /tmp/swarm-agent.service /lib/systemd/system/",
+      "sudo mv /tmp/docker.service /lib/systemd/system/",
       "sudo systemctl daemon-reload",
+      "sudo systemctl restart docker.service",
+      "sudo rm /etc/docker/key.json",
       "sudo systemctl restart docker.service",
       "sudo systemctl start swarm-agent.service"
     ]

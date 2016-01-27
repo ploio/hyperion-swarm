@@ -45,13 +45,33 @@ Read guides to creates the infrastructure :
 
 ## Usage
 
-* Setup your Docker Swarm cluster informations :
+* Setup your Docker Swarm cluster informations using IP address of the Swarm master:
 
         $ alias dockerswarm="docker -H=tcp://x.x.x.x:2375"
 
 * Check cluster informations :
 
         $ dockerswarm info
+        Containers: 4
+        Images: 2
+        Role: primary
+        Strategy: spread
+        Filters: health, port, dependency, affinity, constraint
+        Nodes: 2
+         hyperion-swarm-node-0: 10.0.0.4:2375
+          └ Containers: 2
+          └ Reserved CPUs: 0 / 1
+          └ Reserved Memory: 0 B / 3.806 GiB
+          └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), storagedriver=aufs
+         hyperion-swarm-node-1: 10.0.0.3:2375
+          └ Containers: 2
+          └ Reserved CPUs: 0 / 1
+          └ Reserved Memory: 0 B / 3.806 GiB
+          └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), storagedriver=aufs
+        CPUs: 2
+        Total Memory: 7.612 GiB
+        Name: hyperion-swarm-master
+
 
 
 ## Contributing
