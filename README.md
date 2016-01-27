@@ -5,6 +5,8 @@
 
 ## Description
 
+![Image of components](https://github.com/portefaix/hyperion-swarm/raw/master/docs/hyperion-swarm.png "Hyperion Swarm")
+
 [hyperion][] creates a Cloud environment :
 
 - Identical machine images creation is performed using [Packer][]
