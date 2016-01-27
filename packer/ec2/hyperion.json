@@ -1,0 +1,83 @@
+{
+    "variables": {
+        "access_key": "",
+        "secret_key": "",
+        "account_id": "",
+        "key_name": "",
+        "ssh_public_key": "",
+        "ssh_private_key_file": "",
+        "ssh_user": "",
+        "instance_type": "",
+        "region": "eu-west-1",
+        "ec2_version": "1.5.7",
+        "consul_version": "0.6.3",
+        "swarm_version": "1.0.0",
+        "ami_name": "hyperion-swarm-0-1-0 {{timestamp}}",
+        "ami_description": "Base Image for Hyperion Swarm"
+    },
+
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `access_key`}}",
+            "secret_key": "{{user `secret_key`}}",
+            "ami_users": ["{{user `account_id`}}"],
+            "region": "{{user `region`}}",
+            "source_ami": "ami-e31a6594",
+            "instance_type": "{{user `instance_type`}}",
+            "ssh_username": "{{user `ssh_user`}}",
+            "ami_name": "{{user `ami_name`}}",
+            "ami_description": "{{user `ami_description`}}"
+        }
+    ],
+
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get update",
+                "sudo apt-get install -y ruby unzip kpartx parted grub",
+                "wget http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip",
+                "sudo mkdir -p /usr/local/ec2",
+                "sudo unzip ec2-ami-tools.zip -d /usr/local/ec2",
+                "sudo mv /usr/local/ec2/ec2-ami-tools-* /usr/local/ec2/ec2-ami-tools"
+            ]
+        },
+        {
+             "type": "shell",
+             "inline": [
+                 "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
+                 "echo 'deb http://apt.dockerproject.org/repo debian-jessie main' > /tmp/docker.list",
+                 "sudo mv /tmp/docker.list /etc/apt/sources.list.d/docker.list",
+                 "sudo apt-get -y update",
+                 "sudo apt-get purge lxc-docker",
+                 "sudo apt-get -y install unzip docker-engine curl",
+                 "sudo systemctl enable docker",
+                 "sudo systemctl start docker"
+             ]
+         },
+        {
+            "type": "shell",
+            "inline": [
+                "curl -o /tmp/consul.zip -L https://releases.hashicorp.com/consul/{{ user `consul_version` }}/consul_{{ user `consul_version` }}_linux_amd64.zip",
+                "sudo unzip -d /usr/local/bin /tmp/consul.zip",
+                "sudo mkdir -p /etc/consul"
+
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo mkdir -p /opt/consul/ui",
+                "curl -o /tmp/consul-ui.zip -L https://releases.hashicorp.com/consul/{{ user `consul_version` }}/consul_{{ user `consul_version` }}_web_ui.zip",
+                "sudo unzip -d /opt/consul/ui /tmp/consul-ui.zip"
+            ]
+        },
+	{
+	    "type": "shell",
+	    "inline": [
+		"sudo docker run -d --name swarm-cluster swarm:{{user `swarm_version`}}"
+	    ]
+	}
+    ]
+}
