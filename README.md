@@ -22,9 +22,6 @@ In [Docker Swarm][] :
 - consul : the service discovery used (See https://docs.docker.com/swarm/discovery/)
 
 
-
-
-
 ## Initialization
 
 Initialize environment:
