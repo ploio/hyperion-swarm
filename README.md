@@ -50,23 +50,40 @@ Read guides to creates the infrastructure :
 
 * Check cluster informations :
 
-        $ dockerswarm info
         Containers: 4
+         Running: 2
+         Paused: 0
+         Stopped: 2
         Images: 2
+        Server Version: swarm/1.2.0
         Role: primary
         Strategy: spread
         Filters: health, port, dependency, affinity, constraint
         Nodes: 2
-         hyperion-swarm-node-0: 10.0.0.4:2375
-          └ Containers: 2
-          └ Reserved CPUs: 0 / 1
-          └ Reserved Memory: 0 B / 3.806 GiB
-          └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), storagedriver=aufs
-         hyperion-swarm-node-1: 10.0.0.3:2375
-          └ Containers: 2
-          └ Reserved CPUs: 0 / 1
-          └ Reserved Memory: 0 B / 3.806 GiB
-          └ Labels: executiondriver=native-0.2, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), storagedriver=aufs
+          hyperion-swarm-node-0: 10.0.0.5:2375
+           └ Status: Healthy
+           └ Containers: 2
+           └ Reserved CPUs: 0 / 1
+           └ Reserved Memory: 0 B / 3.806 GiB
+           └ Labels: executiondriver=, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), storagedriver=aufs
+           └ Error: (none)
+           └ UpdatedAt: 2016-04-20T10:44:54Z
+           └ ServerVersion: 1.11.0
+          hyperion-swarm-node-1: 10.0.0.4:2375
+           └ Status: Healthy
+           └ Containers: 2
+           └ Reserved CPUs: 0 / 1
+           └ Reserved Memory: 0 B / 3.806 GiB
+           └ Labels: executiondriver=, kernelversion=3.16.0-4-amd64, operatingsystem=Debian GNU/Linux 8 (jessie), storagedriver=aufs
+           └ Error: (none)
+           └ UpdatedAt: 2016-04-20T10:44:56Z
+           └ ServerVersion: 1.11.0
+        Plugins:
+         Volume:
+         Network:
+        Kernel Version: 3.16.0-4-amd64
+        Operating System: linux
+        Architecture: amd64
         CPUs: 2
         Total Memory: 7.612 GiB
         Name: hyperion-swarm-master
