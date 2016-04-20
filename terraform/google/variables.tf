@@ -35,7 +35,7 @@ variable "gce_ipv4_range" {
 
 variable "gce_image" {
   description = "The name of the image to base the launched instances."
-  default = "hyperion-swarm-0-3-0-v20160126"
+  default = "hyperion-swarm-0-5-0-v20160420"
 }
 
 variable "gce_machine_type_discover" {
@@ -64,5 +64,5 @@ variable "hyperion_nb_nodes" {
 
 variable "swarm_version" {
   description = "Version of Docker Swarm."
-  default = "1.0.0"
+  default = "1.2.0"
 }
